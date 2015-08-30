@@ -107,7 +107,7 @@ void on_trackbar2(int, void * value) {
 }
 
 
-
+/* transfert dans mainWindow
 void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
     //zoom en pourcentage
     int izoom = 100;
@@ -133,38 +133,17 @@ void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
     //MessageBeep(MB_OK);
     //waitKey(0);
 }
+*/
 
 
-int start(int argc, char **argv)
+
+VideoCapture getInputVideo(std::string vid)
 {
-    //FreeConsole();
-    //String vid = String("C:\\Users\\Corentin\\Videos\\Mon film.mp4");
-
-    char wndname[] = "Open Warp";
-    imshow(wndname, Mat(500,800,CV_16U));
-
-    QString qwvid = QFileDialog::getOpenFileName();
-    //GetOpenFileName(&ofn);
-
-    // Now simpley display the file name 
-    //MessageBox(NULL, ofn.lpstrFile, __TEXT("File Name"), MB_OK);
-    wstring wvid = qwvid.toStdWString();
-
-
-    wcout << wvid << endl;
-    //cout << getBuildInformation() << endl;
-    //cuda::printShortCudaDeviceInfo(cuda::getDevice());
-    //setup converter
-  
-    Mat map_x, map_y;
-
-    string vid = string(wvid.begin(), wvid.end());
-
     VideoCapture inputVideo(vid);              // Open input
     if (!inputVideo.isOpened())
     {
         cout << "Could not open the input video: " << vid << endl;
-        return -1;
+        return inputVideo;
     }
 
     string::size_type pAt = vid.find_last_of('.');                  // Find extension point
@@ -178,23 +157,35 @@ int start(int argc, char **argv)
         (int)inputVideo.get(CV_CAP_PROP_FRAME_HEIGHT));
 
 
-    Size output(1000, 1000);
+    //Size output(1000, 1000);
 
 
     cout << "Input frame resolution: Width=" << S.width << "  Height=" << S.height
         << " of nr#: " << inputVideo.get(CV_CAP_PROP_FRAME_COUNT) << endl;
     cout << "Input codec type: " << EXT << endl;
 
+    return inputVideo;
+}
+
+
+int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/, const std::string & NAME)
+{
+
+    char wndname[] = "Open Warp";
+  
+    Mat map_x, map_y;
+
+
     Mat src, res, mapx, mapy;
     int hauteur = 45;
     float zoom = 1;
-
+/*
     //lancement du brouillon
     inputVideo.set(CAP_PROP_POS_FRAMES, 10);
     inputVideo >> src;              // read
     draft(src, output, &hauteur, &zoom);
     inputVideo.set(CAP_PROP_POS_FRAMES, 0);
-
+*/
     create_map(mapx, mapy, S, output, hauteur , zoom);
     cout << "map created" << endl;
 
@@ -204,10 +195,11 @@ int start(int argc, char **argv)
     char shaut[100];
     char szoom[100];
     sprintf(shaut, "%d", hauteur);
-    sprintf(szoom, "%d", zoom);
+    sprintf(szoom, "%f", zoom);
 
-    const string NAME = vid.substr(0, pAt)+"H"+string(shaut)+"Z"+string(szoom)+".avi";   // Form the new name with container
+    //const string NAME = vid.substr(0, pAt)+"H"+string(shaut)+"Z"+string(szoom)+".avi";   // Form the new name with container
     VideoWriter outputVideo;                                        // Open the output
+    int ex;//fourcc
     outputVideo.open(path+"\\temp.avi", ex = -1, inputVideo.get(CV_CAP_PROP_FPS), output , true);
 
     if (!outputVideo.isOpened())

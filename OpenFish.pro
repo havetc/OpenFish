@@ -17,11 +17,13 @@ SOURCES += main.cpp\
     OpenWarp.cpp
 
 HEADERS  += mainwindow.h \
-    openwarp.h
+    openwarp.h \
+    asmOpenCV.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    getsize.ui
 
-unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86/mingw/lib/ -llibopencv_world300
+unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86_AVX/mingw/lib/ -llibopencv_world300
 
 INCLUDEPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
 DEPENDPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include

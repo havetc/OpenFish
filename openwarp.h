@@ -25,11 +25,11 @@ void on_trackbar( int, void * change);
 
 void on_trackbar2(int, void * value);
 
-void draft(Mat image, Size & output, int * hauteur, float * zoom );
+QPixmap draft(Mat image, Size & output, int hauteur, int zoom );
 
+VideoCapture getInputVideo(std::string vid);
 
-int start(int argc, char **argv);
-
+int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/, const std::string & NAME);
 
 #endif // OPENWARP
 
