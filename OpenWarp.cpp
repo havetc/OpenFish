@@ -8,6 +8,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/core/cuda.hpp>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QProgressBar>
 
 #define _USE_MATH_DEFINES // for C++
 #include <math.h>
@@ -146,7 +148,6 @@ VideoCapture getInputVideo(std::string vid)
         return inputVideo;
     }
 
-    string::size_type pAt = vid.find_last_of('.');                  // Find extension point
 
     int ex = static_cast<int>(inputVideo.get(CV_CAP_PROP_FOURCC));     // Get Codec Type- Int form
 
@@ -168,17 +169,14 @@ VideoCapture getInputVideo(std::string vid)
 }
 
 
-int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/, const std::string & NAME)
+int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/,
+              const std::string & NAME, const std::string path)
 {
 
     char wndname[] = "Open Warp";
-  
-    Mat map_x, map_y;
-
-
+    //barre->setVisible(true);
+    //barre->setValue(0);
     Mat src, res, mapx, mapy;
-    int hauteur = 45;
-    float zoom = 1;
 /*
     //lancement du brouillon
     inputVideo.set(CAP_PROP_POS_FRAMES, 10);
@@ -187,17 +185,11 @@ int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Siz
     inputVideo.set(CAP_PROP_POS_FRAMES, 0);
 */
     create_map(mapx, mapy, S, output, hauteur , zoom);
+
     cout << "map created" << endl;
 
-    string prog = string(argv[0]);
-    const string path = prog.substr(0, prog.find_last_of('\\'));
-    cout << "Path: " << path << endl;
-    char shaut[100];
-    char szoom[100];
-    sprintf(shaut, "%d", hauteur);
-    sprintf(szoom, "%f", zoom);
+    //barre->setMaximum(fcount);
 
-    //const string NAME = vid.substr(0, pAt)+"H"+string(shaut)+"Z"+string(szoom)+".avi";   // Form the new name with container
     VideoWriter outputVideo;                                        // Open the output
     int ex;//fourcc
     outputVideo.open(path+"\\temp.avi", ex = -1, inputVideo.get(CV_CAP_PROP_FPS), output , true);
@@ -222,9 +214,11 @@ int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Siz
             remap(src, res, mapx, mapy, INTER_LINEAR);// , BORDER_WRAP);
             //res = src;
 
-            if (i % 1 == 0) {
-                imshow(wndname, res);
-                waitKey(1);
+            if (i % 10 == 0) {
+                //imshow(wndname, res);
+                //waitKey(1);
+                //barre->setValue(i);
+                //RenderThread::update(i);
             }
             outputVideo << res;
         }
@@ -238,7 +232,7 @@ int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Siz
     remove(temp.c_str());
 //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
     cout << "Finished writing" << endl;
-
+    //barre->setVisible(false);
     //waitKey(0);
     return 0;
 }

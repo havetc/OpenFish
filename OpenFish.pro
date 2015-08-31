@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = OpenFish
 TEMPLATE = app
 
+win32:RC_ICONS += favicon.ico
 
 SOURCES += main.cpp\
         mainwindow.cpp \

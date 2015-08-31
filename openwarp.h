@@ -8,6 +8,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/core/cuda.hpp>
 #include <QFileDialog>
+#include <QProgressBar>
 
 using namespace cv;
 
@@ -29,7 +30,8 @@ QPixmap draft(Mat image, Size & output, int hauteur, int zoom );
 
 VideoCapture getInputVideo(std::string vid);
 
-int start(int argc, char **argv, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/, const std::string & NAME);
+int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo,
+              Size output, Size S /*input*/, const std::string & NAME, const std::string path);
 
 #endif // OPENWARP
 
