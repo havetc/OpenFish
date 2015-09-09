@@ -13,10 +13,44 @@
 
 namespace Ui {
 class MainWindow;
+class GetSize;
 }
+
+/**
+ * @brief The OUTPUT_TYPE enum
+ * choice of output configuration possible
+ */
+enum OUTPUT_TYPE
+{
+    INPUT_SIZE = 1,
+    INPUT_HEIGHT = 2,
+    INPUT_WIDTH = 3,
+    CUSTOM = 4
+};
 
 class RenderThread;
 
+/**
+ * @brief The GetSize class
+ * It contains all the stuff related to the contextual window
+ * asking for the size
+ */
+class GetSize : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit GetSize(QWidget *parent = 0);
+    ~GetSize();
+
+    //ui should better be private, but its simpler to manage with public
+    Ui::GetSize *ui;
+};
+
+/**
+ * @brief The MainWindow class
+ * It contains all the main windows stuff
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -28,24 +62,37 @@ public:
 public slots:
 
     void selectFile();
+    void selectRes();
     void update();
     void endRender();
     void startRender();
 
+protected:
+    virtual void wheelEvent(QWheelEvent* event);
+
 private:
     Ui::MainWindow *ui;
 
+    GetSize* GS_wnd;
     int argc;
     char** argv;
     std::string vid;
     cv::Mat src;
     cv::VideoCapture inputvideo;
+    cv::Size resSortie;
     QGraphicsScene *scn;
     QGraphicsPixmapItem *item;
     RenderThread * thr;
+    OUTPUT_TYPE type;
 
 };
 
+
+/**
+ * @brief The RenderThread class
+ * utilisee pour faire fonctionner la conversion sur un thread different, afin de ne pas bloquer
+ * l'interface et d'avoir une barre de chargement
+ */
 class RenderThread : public QThread {
 
     Q_OBJECT
@@ -73,7 +120,7 @@ public:
         using namespace std;
         using namespace cv;
 
-        char wndname[] = "Open Warp";
+        //char wndname[] = "Open Warp";
         //barre->setVisible(true);
         //barre->setValue(0);
         Mat src, res, mapx, mapy;
@@ -125,6 +172,8 @@ public:
             }
         }
 
+        // comme tous les chemins de fichiers cree dans ce projet, il ne sont pas compatible UNIX mais que windows
+        //il faut faire des appels a des librairie Qt pour gerant des chemins ou utiliser des #ifdef pour avoir une version multiplateforme
         string ffmpegCMD("\"\""+path+"\\ffmpeg\" -y -i \""+path+"\\temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\"");
         cout << ffmpegCMD << endl;
         cout << system(ffmpegCMD.c_str());
