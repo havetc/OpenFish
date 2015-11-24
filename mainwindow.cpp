@@ -58,7 +58,8 @@ MainWindow::~MainWindow()
     delete scn;
     delete ui;
 }
-
+// implementation d'un zoom molette, peu convaincant
+/*
 void MainWindow::wheelEvent(QWheelEvent *event){
 
         ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -76,6 +77,7 @@ void MainWindow::wheelEvent(QWheelEvent *event){
 
         //ui->graphicsView->setTransform(QTransform(h11, h12, h21, h22, 0, 0));
 }
+*/
 
 void MainWindow::selectFile()
 {

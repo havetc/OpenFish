@@ -14,17 +14,28 @@ TEMPLATE = app
 win32:RC_ICONS += favicon.ico
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+    mainwindow.cpp \
     OpenWarp.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS += mainwindow.h \
     openwarp.h \
     asmOpenCV.h
 
 FORMS    += mainwindow.ui \
     getsize.ui
 
-unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86_AVX/mingw/lib/ -llibopencv_world300
+#unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86/mingw/staticlib/ -llibopencv_core300 -llibopencv_imgproc300 -llibopencv_video300
+
+#INCLUDEPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
+#DEPENDPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
+
+#unix|win32: LIBS += -lcomctl32
+#unix|win32: LIBS += -lmsvfw32
+
+
+unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86/mingw/lib -lopencv_world300
 
 INCLUDEPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
 DEPENDPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
+
+

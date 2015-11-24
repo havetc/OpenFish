@@ -67,8 +67,8 @@ public slots:
     void endRender();
     void startRender();
 
-protected:
-    virtual void wheelEvent(QWheelEvent* event);
+//protected:
+//    virtual void wheelEvent(QWheelEvent* event);
 
 private:
     Ui::MainWindow *ui;

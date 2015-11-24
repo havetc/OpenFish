@@ -1,4 +1,4 @@
-#ifndef WARP
+ï»¿#ifndef WARP
 #define WARP
 
 #include "openwarp.h"
@@ -25,7 +25,7 @@ Point3f polar_to_sphere(float angle, float mag, float r)
     return Point3f(r * st * cos(angle), r * st * sin(angle), r * cos(mag));
 }
 
-//on cherche a obtenir le rayon pour avoir la distance à l'écran
+//on cherche a obtenir le rayon pour avoir la distance a l'ecran
 float get_r(float theta, float phi, Point3f & contact) {
     //coordonnee du point sur le dome
     Point3f pdome = polar_to_sphere(phi, theta);
@@ -47,12 +47,12 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
 
     Point2f center(output.width / 2.0, output.height / 2.0);
 
-    //angle lié à la hauteur, en radian
+    //angle liÃ© Ã  la hauteur, en radian
     float hauteur = (M_PI / 180) * AngleHauteur;
     float invzoom = 1/zoom;
     float thetac = M_PI / 2.0 - hauteur;
 
-    //definition des coordonnée de contact dome/plan
+    //definition des coordonnÃ©e de contact dome/plan
     float zco = cos(thetac);
     float yco = 0;
     float xco = sin(thetac);
@@ -121,7 +121,7 @@ void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
     Mat mx, my, mapx, mapy, res;
     Size s = image.size();
     while (waitKey(10) == -1) {
-        //on retrace que si l'on a changé un paramètre
+        //on retrace que si l'on a changÃ© un paramÃ¨tre
         if (change) {
             *zoom = izoom / 100.0;
             create_map(mapx, mapy, s, output / 10, *hauteur, *zoom);
@@ -173,7 +173,7 @@ int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVide
               const std::string & NAME, const std::string path)
 {
 
-    char wndname[] = "Open Warp";
+
     //barre->setVisible(true);
     //barre->setValue(0);
     Mat src, res, mapx, mapy;
@@ -224,13 +224,15 @@ int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVide
         }
     }
     
-    string ffmpegCMD("\"\""+path+"\\ffmpeg\" -y -i \""+path+"\\temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\"");
+    string ffmpegCMD("\"\""+path+"/ffmpeg\" -y -i \""+path+"/temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\" > log.txt \"");
     cout << ffmpegCMD << endl;
-    cout << system(ffmpegCMD.c_str());
-    string temp(path + "\\temp.avi");
+    cout << "TEST TEST TEST TEST" << endl;
+    cerr << "TEST2 TEST2 TES T  2 TEST2" << endl;
+    cout << system(ffmpegCMD.c_str()) << endl;
+    string temp(path + "/temp.avi");
     cout << "temporaire a supprimer:" << temp << endl;
-    remove(temp.c_str());
-//    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
+//    remove(temp.c_str());
+//    MessageBox(NULL, TEXT("Conversion terminÃ©e"), __TEXT("Info"), MB_OK);
     cout << "Finished writing" << endl;
     //barre->setVisible(false);
     //waitKey(0);
