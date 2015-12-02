@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = OpenFish
 TEMPLATE = app
 
-win32:RC_ICONS += favicon.ico
 
 SOURCES += main.cpp\
     mainwindow.cpp \
@@ -33,9 +32,10 @@ FORMS    += mainwindow.ui \
 #unix|win32: LIBS += -lmsvfw32
 
 
-unix|win32: LIBS += -L$$PWD/../../../../OpenCVB/BuildMingw/install/x86/mingw/lib -lopencv_world300
+unix|win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopencv_world300
 
-INCLUDEPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
-DEPENDPATH += $$PWD/../../../../OpenCVB/BuildMingw/install/include
+INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
+DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include
 
 
+win32:RC_ICONS += favicon.ico

@@ -76,7 +76,10 @@ private:
     GetSize* GS_wnd;
     int argc;
     char** argv;
-    std::string vid;
+
+    ///complete absolute path of the input video
+    QString vid;
+
     cv::Mat src;
     cv::VideoCapture inputvideo;
     cv::Size resSortie;
@@ -98,8 +101,8 @@ class RenderThread : public QThread {
     Q_OBJECT
 
 public:
-    RenderThread(int hauteur, float zoom, std::string vid, cv::VideoCapture & inputVideo,
-                 cv::Size output, cv::Size S /*input*/, const std::string & NAME, const std::string path, QProgressBar * barre, MainWindow * win)
+    RenderThread(int hauteur, float zoom, QString vid, cv::VideoCapture & inputVideo,
+                 cv::Size output, cv::Size S /*input*/, const QString & NAME, const QDir& path, QProgressBar * barre, MainWindow * win)
         : QThread::QThread(){
         this->hauteur = hauteur;
         this->zoom = zoom;
@@ -107,6 +110,7 @@ public:
         this->output =output;
         this->S = S;
         this->NAME = NAME;
+        std::wcout << L"Output File: " << NAME.toStdWString() << std::endl;
         this->path = path;
         this->inputvideo  = inputVideo;
         this->barre = barre;
@@ -139,11 +143,11 @@ public:
 
         VideoWriter outputVideo;                                        // Open the output
         int ex;//fourcc
-        outputVideo.open(path+"\\temp.avi", ex = -1, inputvideo.get(CV_CAP_PROP_FPS), output , true);
+        outputVideo.open(path.absoluteFilePath( QString("temp.avi") ).toStdString() , ex = -1, inputvideo.get(CV_CAP_PROP_FPS), output , true);
 
         if (!outputVideo.isOpened())
         {
-            cout << "Could not open the output video for write: " << vid << endl;
+            cerr << "Could not open the temp output video for write: " << vid.toStdString() << endl;
             QMessageBox::critical(NULL, QString("Erreur"), QString("Le fichier n'a pas pu être écrit"));
             return;// -1;
         }
@@ -162,7 +166,7 @@ public:
                 remap(src, res, mapx, mapy, INTER_LINEAR);// , BORDER_WRAP);
                 //res = src;
 
-                if (i % 10 == 0) {
+                if (i % 4 == 0) {
                     //imshow(wndname, res);
                     //waitKey(1);
                     //barre->setValue(i);
@@ -172,14 +176,17 @@ public:
             }
         }
 
-        // comme tous les chemins de fichiers cree dans ce projet, il ne sont pas compatible UNIX mais que windows
-        //il faut faire des appels a des librairie Qt pour gerant des chemins ou utiliser des #ifdef pour avoir une version multiplateforme
-        string ffmpegCMD("\"\""+path+"\\ffmpeg\" -y -i \""+path+"\\temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\"");
-        cout << ffmpegCMD << endl;
-        cout << system(ffmpegCMD.c_str());
-        string temp(path + "\\temp.avi");
-        cout << "temporaire a supprimer:" << temp << endl;
-        QFile::remove(QString::fromStdString(temp));
+
+
+        QString ffmpegCMD = QString::fromStdWString(wstring(L"\"\""+path.absoluteFilePath("ffmpeg").toStdWString() +
+                          L"\" -y -i \""+path.absoluteFilePath("temp.avi").toStdWString() +
+                          L"\" -i \""+vid.toStdWString()+L"\" -map 0:v -map 1:a -c copy -shortest \""+NAME.toStdWString()+L"\"\"" ) );
+
+        wcout << ffmpegCMD.toStdWString() << endl;
+        cout << "retour ffmpeg: " << _wsystem(ffmpegCMD.toStdWString().c_str()) << endl;
+        QString temp = path.absoluteFilePath("temp.avi");
+        cout << "temporaire a supprimer:" << temp.toStdString() << endl;
+        QFile::remove(temp);
     //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
         cout << "Finished writing" << endl;
         end();
@@ -189,12 +196,17 @@ private:
     int hauteur;
     float zoom;
     QProgressBar * barre;
-    std::string vid;
+    //absolute path of the input video
+    QString vid;
     cv::VideoCapture inputvideo;
     cv::Size output;
     cv::Size S /*input*/;
-    std::string NAME;
-    std::string path;
+
+    //absolute path of the output video
+    QString NAME;
+
+    //path of the directory which contains input and output video
+    QDir path;
 
 signals:
     void update(int);

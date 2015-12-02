@@ -39,6 +39,7 @@ float get_r(float theta, float phi, Point3f & contact) {
  */
 void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur , float zoom ) {
 
+
     map_x.create(output, CV_32FC1);
     map_y.create(output, CV_32FC1);
 
@@ -139,12 +140,12 @@ void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
 
 
 
-VideoCapture getInputVideo(std::string vid)
+VideoCapture getInputVideo(QString vid)
 {
-    VideoCapture inputVideo(vid);              // Open input
+    VideoCapture inputVideo(vid.toStdString());              // Open input
     if (!inputVideo.isOpened())
     {
-        cout << "Could not open the input video: " << vid << endl;
+        cout << "Could not open the input video: " << vid.toStdString() << endl;
         return inputVideo;
     }
 
@@ -168,75 +169,82 @@ VideoCapture getInputVideo(std::string vid)
     return inputVideo;
 }
 
+/**
+  *
+  *  DEPRECATED, Now running inside the RenderThread
+  *
+  */
 
-int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/,
-              const std::string & NAME, const std::string path)
-{
+//int startConv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/,
+//              const std::string & NAME, const std::string path)
+//{
+
+//    std::cout << "test startConv" << std::endl;
 
 
-    //barre->setVisible(true);
-    //barre->setValue(0);
-    Mat src, res, mapx, mapy;
-/*
-    //lancement du brouillon
-    inputVideo.set(CAP_PROP_POS_FRAMES, 10);
-    inputVideo >> src;              // read
-    draft(src, output, &hauteur, &zoom);
-    inputVideo.set(CAP_PROP_POS_FRAMES, 0);
-*/
-    create_map(mapx, mapy, S, output, hauteur , zoom);
+//    //barre->setVisible(true);
+//    //barre->setValue(0);
+//    Mat src, res, mapx, mapy;
+///*
+//    //lancement du brouillon
+//    inputVideo.set(CAP_PROP_POS_FRAMES, 10);
+//    inputVideo >> src;              // read
+//    draft(src, output, &hauteur, &zoom);
+//    inputVideo.set(CAP_PROP_POS_FRAMES, 0);
+//*/
+//    create_map(mapx, mapy, S, output, hauteur , zoom);
 
-    cout << "map created" << endl;
+//    cout << "map created" << endl;
 
-    //barre->setMaximum(fcount);
+//    //barre->setMaximum(fcount);
 
-    VideoWriter outputVideo;                                        // Open the output
-    int ex;//fourcc
-    outputVideo.open(path+"\\temp.avi", ex = -1, inputVideo.get(CV_CAP_PROP_FPS), output , true);
+//    VideoWriter outputVideo;                                        // Open the output
+//    int ex;//fourcc
+//    outputVideo.open(path+"\\temp.avi", ex = -1, inputVideo.get(CV_CAP_PROP_FPS), output , true);
 
-    if (!outputVideo.isOpened())
-    {
-        cout << "Could not open the output video for write: " << vid << endl;
-        return -1;
-    }
+//    if (!outputVideo.isOpened())
+//    {
+//        cout << "Could not open the output video for write: " << vid << endl;
+//        return -1;
+//    }
 
-    for (long i = 0; true; i++) //Show the image captured in the window and repeat
-    {
+//    for (long i = 0; true; i++) //Show the image captured in the window and repeat
+//    {
 
-        inputVideo >> src;              // read
+//        inputVideo >> src;              // read
 
-        if (src.empty()) {
-            outputVideo.release();
-            break;
-        }
-        else {
+//        if (src.empty()) {
+//            outputVideo.release();
+//            break;
+//        }
+//        else {
 
-            remap(src, res, mapx, mapy, INTER_LINEAR);// , BORDER_WRAP);
-            //res = src;
+//            remap(src, res, mapx, mapy, INTER_LINEAR);// , BORDER_WRAP);
+//            //res = src;
 
-            if (i % 10 == 0) {
-                //imshow(wndname, res);
-                //waitKey(1);
-                //barre->setValue(i);
-                //RenderThread::update(i);
-            }
-            outputVideo << res;
-        }
-    }
-    
-    string ffmpegCMD("\"\""+path+"/ffmpeg\" -y -i \""+path+"/temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\" > log.txt \"");
-    cout << ffmpegCMD << endl;
-    cout << "TEST TEST TEST TEST" << endl;
-    cerr << "TEST2 TEST2 TES T  2 TEST2" << endl;
-    cout << system(ffmpegCMD.c_str()) << endl;
-    string temp(path + "/temp.avi");
-    cout << "temporaire a supprimer:" << temp << endl;
-//    remove(temp.c_str());
-//    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
-    cout << "Finished writing" << endl;
-    //barre->setVisible(false);
-    //waitKey(0);
-    return 0;
-}
+//            if (i % 10 == 0) {
+//                //imshow(wndname, res);
+//                //waitKey(1);
+//                //barre->setValue(i);
+//                //RenderThread::update(i);
+//            }
+//            outputVideo << res;
+//        }
+//    }
+
+//    string ffmpegCMD("\"\""+path+"/ffmpeg\" -y -i \""+path+"/temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\" > log.txt \"");
+//    cout << ffmpegCMD << endl;
+//    cout << "TEST TEST TEST TEST" << endl;
+//    cerr << "TEST2 TEST2 TES T  2 TEST2" << endl;
+//    cout << system(ffmpegCMD.c_str()) << endl;
+//    string temp(path + "/temp.avi");
+//    cout << "temporaire a supprimer:" << temp << endl;
+////    remove(temp.c_str());
+////    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
+//    cout << "Finished writing" << endl;
+//    //barre->setVisible(false);
+//    //waitKey(0);
+//    return 0;
+//}
 
 #endif

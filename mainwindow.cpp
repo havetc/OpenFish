@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
     QMainWindow(parent),
     ui(new Ui::MainWindow), GS_wnd(new GetSize(this))
 {
+
     ui->setupUi(this);
     this->argc = argc;
     this->argv = argv;
@@ -81,20 +82,20 @@ void MainWindow::wheelEvent(QWheelEvent *event){
 
 void MainWindow::selectFile()
 {
-    QString qwvid = QFileDialog::getOpenFileName(this,QString("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
+    this->vid = QFileDialog::getOpenFileName(this,QString("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
     //GetOpenFileName(&ofn);
 
     // Now simpley display the file name
     //MessageBox(NULL, ofn.lpstrFile, __TEXT("File Name"), MB_OK);
-    this->vid = qwvid.toStdString();
-    //start(argc, argv);
-    QFile file(qwvid);
+
+
+    QFile file(this->vid);
     if (!file.exists()){
-        QMessageBox::warning(this, QString("Attention"), QString("Le fichier: "+qwvid+" n'exite pas"));
+        QMessageBox::warning(this, QString("Attention"), QString("Le fichier: "+this->vid+" n'exite pas"));
     } else {
-        this->inputvideo = getInputVideo(vid);
+        this->inputvideo = getInputVideo(this->vid);
         if(this->inputvideo.isOpened()) {
-            QMessageBox::information(this, QString("Vidéo Ouverte"), QString::fromStdString(vid));
+            QMessageBox::information(this, QString("Vidéo Ouverte"), this->vid);
             ui->verticalSliderHaut->setEnabled(true);
             ui->verticalSliderZoom->setEnabled(true);
             ui->pushButton->setEnabled(true);
@@ -112,7 +113,7 @@ void MainWindow::selectFile()
             //this->adjustSize();
             //ui->graphicsView->show();
         } else {
-            QMessageBox::critical(this, QString("Attention"), QString("Le fichier: "+qwvid+" n'est pas un fichier vidéo valide"));
+            QMessageBox::critical(this, QString("Attention"), QString("Le fichier: "+vid+" n'est pas un fichier vidéo valide"));
         }
     }
 }
@@ -180,18 +181,18 @@ void MainWindow::startRender()
     this->ui->menuTest->setEnabled(false);
     this->ui->menuOptions->setEnabled(false);
     this->ui->pushButton->setEnabled(false);
-    std::string prog = QCoreApplication::applicationDirPath().toStdString();
-    const std::string path = prog.substr(0, prog.find_last_of('\\'));
-    std::cout << "Path: " << path << std::endl;
+    //keep the program directory inside "prog"
+    QDir path (QCoreApplication::applicationDirPath());
+    std::cout << "Path: " << path.absolutePath().toStdString() << std::endl;
     char shaut[100];
     char szoom[100];
     sprintf(shaut, "%d", this->ui->verticalSliderHaut->value());
     sprintf(szoom, "%d", this->ui->verticalSliderZoom->value());
     Size S = Size((int)this->inputvideo.get(CV_CAP_PROP_FRAME_WIDTH),    // Acquire input size
         (int)inputvideo.get(CV_CAP_PROP_FRAME_HEIGHT));
-    std::string::size_type pAt = vid.find_last_of('.');                  // Find extension point
+    std::wstring::size_type pAt = vid.toStdString().find_last_of('.');                  // Find extension point
 
-    const std::string NAME = vid.substr(0, pAt)+"H"+std::string(shaut)+"Z"+std::string(szoom)+".avi";   // Form the new name with container
+    const QString NAME = QString::fromStdString(vid.toStdString().substr(0, pAt).append("H"+std::string(shaut)+"Z"+std::string(szoom)+".avi") );   // Form the new name with container
 
     this->ui->progressBar->setVisible(true);
 

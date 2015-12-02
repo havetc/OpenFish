@@ -28,10 +28,11 @@ void on_trackbar2(int, void * value);
 
 QPixmap draft(Mat image, Size & output, int hauteur, int zoom );
 
-VideoCapture getInputVideo(std::string vid);
+VideoCapture getInputVideo(QString vid);
 
-int startconv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo,
-              Size output, Size S /*input*/, const std::string & NAME, const std::string path);
+//DEPRECATED
+//int startConv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo,
+//              Size output, Size S /*input*/, const std::string & NAME, const std::string path);
 
 #endif // OPENWARP
 
