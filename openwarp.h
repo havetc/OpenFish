@@ -20,13 +20,13 @@ float get_r(float theta, float phi, Point3f & contact);
 /*function that create the map used to remap each frame
  * frameSize: output size (?)
  */
-void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur = 45, float zoom = 1);
+void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur = 45, float zoom = 1, int fovChange=100);
 
 void on_trackbar( int, void * change);
 
 void on_trackbar2(int, void * value);
 
-QPixmap draft(Mat image, Size & output, int hauteur, int zoom );
+QPixmap draft(Mat image, Size & output, int hauteur, int zoom , int fovChange);
 
 VideoCapture getInputVideo(QString vid);
 

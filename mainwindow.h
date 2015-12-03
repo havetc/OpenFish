@@ -101,11 +101,12 @@ class RenderThread : public QThread {
     Q_OBJECT
 
 public:
-    RenderThread(int hauteur, float zoom, QString vid, cv::VideoCapture & inputVideo,
+    RenderThread(int hauteur, float zoom, int fov, QString vid, cv::VideoCapture & inputVideo,
                  cv::Size output, cv::Size S /*input*/, const QString & NAME, const QDir& path, QProgressBar * barre, MainWindow * win)
         : QThread::QThread(){
         this->hauteur = hauteur;
         this->zoom = zoom;
+        this->fov = fov;
         this->vid = vid;
         this->output =output;
         this->S = S;
@@ -135,7 +136,7 @@ public:
         draft(src, output, &hauteur, &zoom);
         inputVideo.set(CAP_PROP_POS_FRAMES, 0);
     */
-        create_map(mapx, mapy, S, output, hauteur , zoom);
+        create_map(mapx, mapy, S, output, hauteur , zoom, fov);
 
         cout << "map created" << endl;
 
@@ -149,7 +150,7 @@ public:
         {
             cerr << "Could not open the temp output video for write: " << vid.toStdString() << endl;
             QMessageBox::critical(NULL, QString("Erreur"), QString("Le fichier n'a pas pu être écrit"));
-            return;// -1;
+            end();
         }
 
         for (long i = 0; true; i++) //Show the image captured in the window and repeat
@@ -183,17 +184,23 @@ public:
                           L"\" -i \""+vid.toStdWString()+L"\" -map 0:v -map 1:a -c copy -shortest \""+NAME.toStdWString()+L"\"\"" ) );
 
         wcout << ffmpegCMD.toStdWString() << endl;
-        cout << "retour ffmpeg: " << _wsystem(ffmpegCMD.toStdWString().c_str()) << endl;
-        QString temp = path.absoluteFilePath("temp.avi");
-        cout << "temporaire a supprimer:" << temp.toStdString() << endl;
-        QFile::remove(temp);
-    //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
-        cout << "Finished writing" << endl;
+        //only windows, system should work fine for linux
+        int returned =  _wsystem(ffmpegCMD.toStdWString().c_str());
+        if(returned != 0) {
+            QMessageBox::warning(NULL,QString("Problème son"),QString("Erreur de ffmpeg, le fichier convertit sans son est disponible ici: \n" + path.absoluteFilePath("temp.avi")));
+        } else {
+            QString temp = path.absoluteFilePath("temp.avi");
+            cout << "temporaire a supprimer:" << temp.toStdString() << endl;
+            QFile::remove(temp);
+            //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
+            cout << "Finished writing" << endl;
+        }
         end();
     }
 
 private:
     int hauteur;
+    int fov;
     float zoom;
     QProgressBar * barre;
     //absolute path of the input video

@@ -37,5 +37,5 @@ unix|win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopencv_wo
 INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
 DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include
 
-
+#file icon: http://www.iconarchive.com/show/must-have-icons-by-visualpharm/Open-icon.html
 win32:RC_ICONS += favicon.ico

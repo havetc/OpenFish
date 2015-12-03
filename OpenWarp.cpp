@@ -37,7 +37,7 @@ float get_r(float theta, float phi, Point3f & contact) {
 /*function that create the map used to remap each frame
  * frameSize: output size (?)
  */
-void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur , float zoom ) {
+void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur , float zoom, int fovChange ) {
 
 
     map_x.create(output, CV_32FC1);
@@ -76,8 +76,8 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
             Vec<float, 1> resMag;
             Vec<float, 1> resAng;
 
-            Vec<float, 1> x((M_PI / 2) * p.x / (output.height / 2));
-            Vec<float, 1> y((M_PI / 2) * p.y / (output.height / 2));
+            Vec<float, 1> x((M_PI / 2.0) * p.x * (fovChange / 100.0) / (output.height / 2.0));
+            Vec<float, 1> y((M_PI / 2.0) * p.y * (fovChange / 100.0) / (output.height / 2.0));
 
             cartToPolar(x, y, resMag, resAng);
             /*if (resMag[0] > 1) {
