@@ -355,6 +355,7 @@
      <string>&amp;Options</string>
     </property>
     <addaction name="actionR_solution"/>
+    <addaction name="actionAvec_audio"/>
    </widget>
    <addaction name="menuTest"/>
    <addaction name="menuOptions"/>
@@ -401,6 +402,17 @@
   <action name="actionR_solution">
    <property name="text">
     <string>&amp;Résolution</string>
+   </property>
+  </action>
+  <action name="actionAvec_audio">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string comment="with sound">Avec audio</string>
    </property>
   </action>
  </widget>

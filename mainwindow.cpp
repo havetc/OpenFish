@@ -166,7 +166,7 @@ void MainWindow::update()
     ui->graphicsView->show();
 }
 
-void MainWindow::endRender()
+void MainWindow::endRender(bool withsound)
 {
     this->ui->progressBar->setVisible(false);
 
@@ -174,7 +174,11 @@ void MainWindow::endRender()
     this->ui->menuOptions->setEnabled(true);
     this->ui->pushButton->setEnabled(true);
     this->inputvideo.set(CAP_PROP_POS_FRAMES, 0);
-    QMessageBox::information(this, QString("Info"), QString("Conversion terminée"));
+    if(withsound){
+        QMessageBox::information(this, QString("Info"), QString("Conversion terminée"));
+    } else {
+        QMessageBox::information(this, QString("Info"), QString("Conversion terminée, sans son"));
+    }
 
 }
 
@@ -206,7 +210,8 @@ void MainWindow::startRender()
     this->ui->progressBar->setValue(0);
     this->ui->progressBar->setMaximum(fcount);
 
-    thr = new RenderThread(this->ui->verticalSliderHaut->value(),this->ui->verticalSliderZoom->value() / 100.0,this->ui->verticalSliderFov->value(),
+    thr = new RenderThread(this->ui->actionAvec_audio->isChecked(),
+                this->ui->verticalSliderHaut->value(),this->ui->verticalSliderZoom->value() / 100.0,this->ui->verticalSliderFov->value(),
                            this->vid, this->inputvideo, this->resSortie, S, NAME, path, ui->progressBar, this);
 
     thr->start();
