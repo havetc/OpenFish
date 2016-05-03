@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include <opencv2/highgui.hpp>
-#include <opencv2/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
 #include <QThread>
 #include <QProgressBar>
 #include <QMessageBox>
@@ -111,7 +111,7 @@ public:
         this->output =output;
         this->S = S;
         this->NAME = NAME;
-        std::wcout << L"Output File: " << NAME.toStdWString() << std::endl;
+        std::cout << "Output File: " << NAME.toLocal8Bit().constData() << std::endl;
         this->path = path;
         this->inputvideo  = inputVideo;
         this->barre = barre;
@@ -145,12 +145,13 @@ public:
 
         VideoWriter outputVideo;                                        // Open the output
         int ex;//fourcc
-        outputVideo.open(path.absoluteFilePath( QString("temp.avi") ).toStdString() , ex = -1, inputvideo.get(CV_CAP_PROP_FPS), output , true);
+        ex = CV_FOURCC('X','V','I','D');
+        outputVideo.open(path.absoluteFilePath( QString("temp.avi") ).toLocal8Bit().constData() , ex, inputvideo.get(CV_CAP_PROP_FPS), output , true);
 
         if (!outputVideo.isOpened())
         {
-            cerr << "Could not open the temp output video for write: " << vid.toStdString() << endl;
-            QMessageBox::critical(NULL, QString("Erreur"), QString("Le fichier n'a pas pu être écrit"));
+            cerr << "Could not open the temp output video for write: " << vid.toLocal8Bit().constData() << endl;
+            QMessageBox::critical(NULL, QString("Erreur"), QString::fromLocal8Bit("Le fichier n'a pas pu être écrit"));
             end(true);
         }
 
@@ -160,7 +161,7 @@ public:
             inputvideo >> src;              // read
 
             if (src.empty()) {
-                outputVideo.release();
+//                outputVideo.release();
                 break;
             }
             else {
@@ -185,21 +186,19 @@ public:
         if(withsound){
 
             int returned = 0;
-            QString ffmpegCMD = QString::fromStdWString(wstring(L"\"\""+path.absoluteFilePath("ffmpeg").toStdWString() +
-                                                                L"\" -y -i \""+path.absoluteFilePath("temp.avi").toStdWString() +
-                                                                L"\" -i \""+vid.toStdWString()+L"\" -map 0:v -map 1:a -c copy -shortest \""+NAME.toStdWString()+L"\"\"" ) );
+            QString ffmpegCMD = QString("avconv -y -i \""+path.absoluteFilePath("temp.avi") +
+                                        "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\" " );
 
-            QString logString = QString::fromStdWString(wstring(L"echo \"\"\""+path.absoluteFilePath("ffmpeg").toStdWString() +
-                                                                L"\" -y -i \""+path.absoluteFilePath("temp.avi").toStdWString() +
-                                                                L"\" -i \""+vid.toStdWString()+L"\" -map 0:v -map 1:a -c copy -shortest \""+NAME.toStdWString()+L"\"\"\" > logcmd.txt" ) );
+            QString logString = QString("echo \"avconv -y -i \""+path.absoluteFilePath("temp.avi") +
+                                        "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\"\" > logcmd.txt" );
 
-            wcout << ffmpegCMD.toStdWString() << endl;
+            std::cout << ffmpegCMD.toLocal8Bit().constData() << std::endl;
             //only windows, system should work fine for linux
-            returned =  _wsystem(logString.toStdWString().c_str());
-            returned =  _wsystem(ffmpegCMD.toStdWString().c_str());
+            returned =  system(logString.toLocal8Bit().constData());
+            returned =  system(ffmpegCMD.toLocal8Bit().constData());
 
             if(returned != 0) {
-                QMessageBox::warning(NULL,QString("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
+                QMessageBox::warning(NULL,QString::fromLocal8Bit("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
                 //render done but ffmpeg bug, without sound
                 cout << QFile::rename( temp, NAME) << endl;
                 end(false);

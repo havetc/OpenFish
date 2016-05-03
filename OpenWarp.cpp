@@ -2,11 +2,11 @@
 #define WARP
 
 #include "openwarp.h"
-#include <opencv2/opencv_modules.hpp>
+//#include <opencv2/opencv_modules.hpp>
 #include <opencv2/core/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/core/cuda.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/core/cuda.hpp>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QProgressBar>
@@ -142,10 +142,10 @@ void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
 
 VideoCapture getInputVideo(QString vid)
 {
-    VideoCapture inputVideo(vid.toStdString());              // Open input
+    VideoCapture inputVideo(vid.toLocal8Bit().constData());// Open input
     if (!inputVideo.isOpened())
     {
-        cout << "Could not open the input video: " << vid.toStdString() << endl;
+        cout << "Could not open the input video: " << vid.toLocal8Bit().constData() << endl;
         return inputVideo;
     }
 

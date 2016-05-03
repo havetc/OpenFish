@@ -61,7 +61,7 @@
     <rect>
      <x>270</x>
      <y>120</y>
-     <width>42</width>
+     <width>71</width>
      <height>22</height>
     </rect>
    </property>
@@ -71,14 +71,14 @@
    <property name="accelerated">
     <bool>true</bool>
    </property>
-   <property name="showGroupSeparator" stdset="0">
-    <bool>false</bool>
-   </property>
    <property name="minimum">
     <number>100</number>
    </property>
    <property name="maximum">
     <number>10000</number>
+   </property>
+   <property name="showGroupSeparator" stdset="0">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QSpinBox" name="spinBoxHeigth">
@@ -89,7 +89,7 @@
     <rect>
      <x>270</x>
      <y>160</y>
-     <width>42</width>
+     <width>71</width>
      <height>22</height>
     </rect>
    </property>
@@ -108,8 +108,8 @@
     <rect>
      <x>210</x>
      <y>120</y>
-     <width>47</width>
-     <height>13</height>
+     <width>61</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -121,8 +121,8 @@
     <rect>
      <x>210</x>
      <y>160</y>
-     <width>47</width>
-     <height>13</height>
+     <width>61</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -134,7 +134,7 @@
     <rect>
      <x>120</x>
      <y>30</y>
-     <width>151</width>
+     <width>201</width>
      <height>17</height>
     </rect>
    </property>
@@ -153,7 +153,7 @@
     <rect>
      <x>120</x>
      <y>60</y>
-     <width>201</width>
+     <width>251</width>
      <height>17</height>
     </rect>
    </property>
@@ -169,7 +169,7 @@
     <rect>
      <x>120</x>
      <y>90</y>
-     <width>191</width>
+     <width>271</width>
      <height>17</height>
     </rect>
    </property>

@@ -32,10 +32,14 @@ FORMS    += mainwindow.ui \
 #unix|win32: LIBS += -lmsvfw32
 
 
-unix|win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopencv_world300
+win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopencv_world300
 
-INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
-DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include
+win32: INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
+win32: DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include
 
 #file icon: http://www.iconarchive.com/show/must-have-icons-by-visualpharm/Open-icon.html
 win32:RC_ICONS += favicon.ico
+
+unix: CONFIG += link_pkgconfig
+unix: PKGCONFIG += opencv
+unix: packagesExist(libav-tools){message(ok) }

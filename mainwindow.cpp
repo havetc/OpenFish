@@ -4,8 +4,9 @@
 #include "openwarp.h"
 #include "asmOpenCV.h"
 #include <QMessageBox>
-#include <QStandardPaths>
+#include <QDesktopServices>
 #include <QGraphicsPixmapItem>
+#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <QThread>
 #include <QWheelEvent>
@@ -83,8 +84,7 @@ void MainWindow::wheelEvent(QWheelEvent *event){
 
 void MainWindow::selectFile()
 {
-    QString tempfilename = QFileDialog::getOpenFileName(this,QString("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
-
+    QString tempfilename = QFileDialog::getOpenFileName(this,QString::fromUtf8("Sélectionner la vidéo à traiter"),QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
 
     QFile file(tempfilename);
     if (!file.exists()){
@@ -94,17 +94,17 @@ void MainWindow::selectFile()
         if(this->inputvideo.isOpened()) {
             //we change the attribute of the class only if the new filename is valid, otherwise we keep the old one
             this->vid = tempfilename;
-            QMessageBox::information(this, QString("Vidéo Ouverte"), this->vid);
+            QMessageBox::information(this, QString::fromUtf8("Vidéo Ouverte"), this->vid);
             ui->verticalSliderHaut->setEnabled(true);
             ui->verticalSliderZoom->setEnabled(true);
             ui->verticalSliderFov->setEnabled(true);
             ui->pushButton->setEnabled(true);
-            this->inputvideo.set(CAP_PROP_POS_FRAMES, 10);
+            this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 10);
             inputvideo >> src;              // read
             //defini size
             selectRes();
             QPixmap dem = draft(src, this->resSortie, 45, 100, 100);
-            inputvideo.set(CAP_PROP_POS_FRAMES, 0);
+            inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
             item->setPixmap(dem);
             //ui->graphicsView->fitInView(item,Qt::KeepAspectRatio);
             ui->graphicsView->update();
@@ -113,7 +113,7 @@ void MainWindow::selectFile()
             //this->adjustSize();
             //ui->graphicsView->show();
         } else {
-            QMessageBox::critical(this, QString("Attention"), QString("Le fichier: "+tempfilename+" n'est pas un fichier vidéo valide"));
+            QMessageBox::critical(this, QString("Attention"), QString("Le fichier: "+tempfilename+QString::fromUtf8(" n'est pas un fichier vidéo valide")) );
             //if the new file was invalid, we reload the old one
             this->inputvideo = getInputVideo(this->vid);
         }
@@ -173,11 +173,11 @@ void MainWindow::endRender(bool withsound)
     this->ui->menuTest->setEnabled(true);
     this->ui->menuOptions->setEnabled(true);
     this->ui->pushButton->setEnabled(true);
-    this->inputvideo.set(CAP_PROP_POS_FRAMES, 0);
+    this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
     if(withsound){
-        QMessageBox::information(this, QString("Info"), QString("Conversion terminée"));
+        QMessageBox::information(this, QString("Info"), QString::fromLocal8Bit("Conversion terminée"));
     } else {
-        QMessageBox::information(this, QString("Info"), QString("Conversion terminée, sans son"));
+        QMessageBox::information(this, QString("Info"), QString::fromLocal8Bit("Conversion terminée, sans son"));
     }
 
 }
@@ -222,8 +222,11 @@ QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange ) {
     //zoom en pourcentage
     Mat mx, my, mapx, mapy, res;
     Size s = image.size();
+    Size outputsmall = output;
+    outputsmall.height /= 10;
+    outputsmall.width /= 10;
 
-    create_map(mapx, mapy, s, output / 10, hauteur, zoom/100.0, fovChange);
+    create_map(mapx, mapy, s, outputsmall, hauteur, zoom/100.0, fovChange);
     resize(mapx, mx, output);
     resize(mapy, my, output);
     remap(image, res, mx, my, INTER_LINEAR);// , BORDER_WRAP);
