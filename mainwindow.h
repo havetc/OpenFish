@@ -64,8 +64,10 @@ public slots:
     void selectFile();
     void selectRes();
     void update();
+    void setTime(int time);
     void endRender(bool withsound);
     void startRender();
+    void errorPopUp();
 
 //protected:
 //    virtual void wheelEvent(QWheelEvent* event);
@@ -99,7 +101,6 @@ private:
 class RenderThread : public QThread {
 
     Q_OBJECT
-
 public:
     RenderThread(bool withsound, int hauteur, float zoom, int fov, QString vid, cv::VideoCapture & inputVideo,
                  cv::Size output, cv::Size S /*input*/, const QString & NAME, const QDir& path, QProgressBar * barre, MainWindow * win)
@@ -119,6 +120,7 @@ public:
 
         QObject::connect(this, SIGNAL(update(int)),barre,SLOT(setValue(int)));
         QObject::connect(this, SIGNAL(end(bool)), win, SLOT(endRender(bool)));
+        QObject::connect(this, SIGNAL(sound_error()), win, SLOT(errorPopUp()));
     }
 
     virtual void run() {
@@ -198,7 +200,7 @@ public:
             returned =  system(ffmpegCMD.toLocal8Bit().constData());
 
             if(returned != 0) {
-                QMessageBox::warning(NULL,QString::fromLocal8Bit("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
+                sound_error();
                 //render done but ffmpeg bug, without sound
                 cout << QFile::rename( temp, NAME) << endl;
                 end(false);
@@ -243,6 +245,8 @@ private:
 signals:
     void update(int);
     void end(bool);
+    void sound_error(void);
+
 };
 
 

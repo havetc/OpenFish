@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
     QObject::connect(ui->verticalSliderZoom,SIGNAL(valueChanged(int)),this,SLOT(update()) );
     QObject::connect(ui->actionR_solution, SIGNAL(triggered(bool)), this->GS_wnd, SLOT(show()));
     QObject::connect(this->GS_wnd, SIGNAL(accepted()), this, SLOT(selectRes()));
-
+    QObject::connect(ui->horizontalSliderTime, SIGNAL(valueChanged(int)), this, SLOT(setTime(int)));
 }
 
 MainWindow::~MainWindow()
@@ -166,6 +166,21 @@ void MainWindow::update()
     ui->graphicsView->show();
 }
 
+void MainWindow::setTime(int time)
+{
+    try{
+        double nb = inputvideo.get(CV_CAP_PROP_FRAME_COUNT);
+        inputvideo.set(CV_CAP_PROP_POS_FRAMES, int(time*nb/(1000)));
+        inputvideo >> src; // read a frame
+        if (inputvideo.isOpened()) {
+            update();
+        }
+    }catch(Exception e){
+        //if there is no video, do nothing
+    }
+
+}
+
 void MainWindow::endRender(bool withsound)
 {
     this->ui->progressBar->setVisible(false);
@@ -216,6 +231,11 @@ void MainWindow::startRender()
 
     thr->start();
 
+}
+
+void MainWindow::errorPopUp()
+{
+    QMessageBox::warning(NULL,QString::fromLocal8Bit("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
 }
 
 QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange ) {
