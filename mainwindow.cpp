@@ -98,6 +98,7 @@ void MainWindow::selectFile()
             ui->verticalSliderHaut->setEnabled(true);
             ui->verticalSliderZoom->setEnabled(true);
             ui->verticalSliderFov->setEnabled(true);
+            ui->horizontalSliderTime->setEnabled(true);
             ui->pushButton->setEnabled(true);
             this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 10);
             inputvideo >> src;              // read
@@ -184,7 +185,7 @@ void MainWindow::setTime(int time)
 void MainWindow::endRender(bool withsound)
 {
     this->ui->progressBar->setVisible(false);
-
+    this->ui->horizontalSliderTime->setEnabled(true);
     this->ui->menuTest->setEnabled(true);
     this->ui->menuOptions->setEnabled(true);
     this->ui->pushButton->setEnabled(true);
@@ -200,6 +201,7 @@ void MainWindow::endRender(bool withsound)
 void MainWindow::startRender()
 {
     this->ui->menuTest->setEnabled(false);
+    this->ui->horizontalSliderTime->setEnabled(false);
     this->ui->menuOptions->setEnabled(false);
     this->ui->pushButton->setEnabled(false);
     //keep the program directory inside "prog"

@@ -320,6 +320,9 @@
       </item>
       <item>
        <widget class="QSlider" name="horizontalSliderTime">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="maximum">
          <number>1000</number>
         </property>
