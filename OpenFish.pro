@@ -14,11 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     mainwindow.cpp \
-    OpenWarp.cpp
+    OpenWarp.cpp \
+    fifoomp.cpp
 
 HEADERS += mainwindow.h \
     openwarp.h \
-    asmOpenCV.h
+    asmOpenCV.h \
+    renderThread.hpp \
+    fifoomp.h
 
 FORMS    += mainwindow.ui \
     getsize.ui
@@ -32,7 +35,7 @@ FORMS    += mainwindow.ui \
 #unix|win32: LIBS += -lmsvfw32
 
 
-win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopencv_world300
+win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopenmp -lopencv_world300
 
 win32: INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
 win32: DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include
@@ -42,4 +45,7 @@ win32:RC_ICONS += favicon.ico
 
 unix: CONFIG += link_pkgconfig
 unix: PKGCONFIG += opencv
+unix: LIBS += -lgomp
 unix: packagesExist(libav-tools){message(ok) }
+
+QMAKE_CXXFLAGS += -std=c++11 -fopenmp

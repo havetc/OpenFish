@@ -17,7 +17,8 @@ Point3f polar_to_sphere(float angle, float mag, float r = 1);
 //on cherche a obtenir le rayon pour avoir la distance à l'écran
 float get_r(float theta, float phi, Point3f & contact);
 
-/*function that create the map used to remap each frame
+/**
+ * function that create the map used to remap each frame
  * frameSize: output size (?)
  */
 void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur = 45, float zoom = 1, int fovChange=100);
