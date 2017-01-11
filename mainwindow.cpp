@@ -4,7 +4,11 @@
 #include "openwarp.h"
 #include "asmOpenCV.h"
 #include <QMessageBox>
+#if QT_DEPRECATED_SINCE(5, 0)
 #include <QDesktopServices>
+#else
+#include <QStandardPaths>
+#endif
 #include <QGraphicsPixmapItem>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
@@ -84,7 +88,11 @@ void MainWindow::wheelEvent(QWheelEvent *event){
 
 void MainWindow::selectFile()
 {
+#if QT_DEPRECATED_SINCE(5, 0)
     QString tempfilename = QFileDialog::getOpenFileName(this,QString::fromUtf8("Sélectionner la vidéo à traiter"),QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
+#else
+    QString tempfilename = QFileDialog::getOpenFileName(this,QString::fromUtf8("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
+#endif
 
     QFile file(tempfilename);
     if (!file.exists()){
