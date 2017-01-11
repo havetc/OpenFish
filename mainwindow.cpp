@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
     QObject::connect(ui->actionR_solution, SIGNAL(triggered(bool)), this->GS_wnd, SLOT(show()));
     QObject::connect(this->GS_wnd, SIGNAL(accepted()), this, SLOT(selectRes()));
     QObject::connect(ui->horizontalSliderTime, SIGNAL(valueChanged(int)), this, SLOT(setTime(int)));
+
 }
 
 MainWindow::~MainWindow()
@@ -65,26 +66,6 @@ MainWindow::~MainWindow()
     delete scn;
     delete ui;
 }
-// implementation d'un zoom molette, peu convaincant
-/*
-void MainWindow::wheelEvent(QWheelEvent *event){
-
-        ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-        // Scale the view / do the zoom
-        double scaleFactor = 1.15;
-        if(event->delta() > 0) {
-            // Zoom in
-            ui->graphicsView-> scale(scaleFactor, scaleFactor);
-
-        } else {
-            // Zooming out
-             ui->graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
-        }
-
-
-        //ui->graphicsView->setTransform(QTransform(h11, h12, h21, h22, 0, 0));
-}
-*/
 
 void MainWindow::selectFile()
 {
@@ -203,6 +184,7 @@ void MainWindow::endRender(bool withsound)
     } else {
         QMessageBox::information(this, QString("Info"), QString::fromLocal8Bit("Conversion terminée, sans son"));
     }
+    delete this->thr;
 
 }
 
@@ -237,7 +219,11 @@ void MainWindow::startRender()
 
     thr = new RenderThread(this->ui->actionAvec_audio->isChecked(),
                 this->ui->verticalSliderHaut->value(),this->ui->verticalSliderZoom->value() / 100.0,this->ui->verticalSliderFov->value(),
-                           this->vid, this->inputvideo, this->resSortie, S, NAME, path, ui->progressBar, this);
+                           this->vid, this->inputvideo, this->resSortie, S, NAME, path);
+
+    QObject::connect(this->thr, SIGNAL(update(int)),this->ui->progressBar,SLOT(setValue(int)));
+    QObject::connect(this->thr, SIGNAL(end(bool)), this, SLOT(endRender(bool)));
+    QObject::connect(this->thr, SIGNAL(sound_error()), this, SLOT(errorPopUp()));
 
     thr->start();
 
