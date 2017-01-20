@@ -49,3 +49,6 @@ unix: LIBS += -lgomp
 unix: packagesExist(libav-tools){message(ok) }
 
 QMAKE_CXXFLAGS += -std=c++11 -fopenmp
+
+DISTFILES += \
+    LICENSE

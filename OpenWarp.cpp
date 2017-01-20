@@ -1,4 +1,23 @@
-﻿#ifndef WARP
+﻿/**************************************************************************
+**   corentin, 11/01/2017 2017
+
+**This file is part of OpenFish.
+**
+**OpenFish is free software: you can redistribute it and/or modify
+**it under the terms of the GNU General Public License as published by
+**the Free Software Foundation, either version 3 of the License, or
+**(at your option) any later version.
+**
+**OpenFish is distributed in the hope that it will be useful,
+**but WITHOUT ANY WARRANTY; without even the implied warranty of
+**MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**GNU General Public License for more details.
+**
+**You should have received a copy of the GNU General Public License
+**along with OpenFish.  If not, see <http://www.gnu.org/licenses/>.
+**************************************************************************/
+
+#ifndef WARP
 #define WARP
 
 #include "openwarp.h"
@@ -168,83 +187,5 @@ VideoCapture getInputVideo(QString vid)
 
     return inputVideo;
 }
-
-/**
-  *
-  *  DEPRECATED, Now running inside the RenderThread
-  *
-  */
-
-//int startConv(int hauteur, float zoom, std::string vid, VideoCapture & inputVideo, Size output, Size S /*input*/,
-//              const std::string & NAME, const std::string path)
-//{
-
-//    std::cout << "test startConv" << std::endl;
-
-
-//    //barre->setVisible(true);
-//    //barre->setValue(0);
-//    Mat src, res, mapx, mapy;
-///*
-//    //lancement du brouillon
-//    inputVideo.set(CAP_PROP_POS_FRAMES, 10);
-//    inputVideo >> src;              // read
-//    draft(src, output, &hauteur, &zoom);
-//    inputVideo.set(CAP_PROP_POS_FRAMES, 0);
-//*/
-//    create_map(mapx, mapy, S, output, hauteur , zoom);
-
-//    cout << "map created" << endl;
-
-//    //barre->setMaximum(fcount);
-
-//    VideoWriter outputVideo;                                        // Open the output
-//    int ex;//fourcc
-//    outputVideo.open(path+"\\temp.avi", ex = -1, inputVideo.get(CV_CAP_PROP_FPS), output , true);
-
-//    if (!outputVideo.isOpened())
-//    {
-//        cout << "Could not open the output video for write: " << vid << endl;
-//        return -1;
-//    }
-
-//    for (long i = 0; true; i++) //Show the image captured in the window and repeat
-//    {
-
-//        inputVideo >> src;              // read
-
-//        if (src.empty()) {
-//            outputVideo.release();
-//            break;
-//        }
-//        else {
-
-//            remap(src, res, mapx, mapy, INTER_LINEAR);// , BORDER_WRAP);
-//            //res = src;
-
-//            if (i % 10 == 0) {
-//                //imshow(wndname, res);
-//                //waitKey(1);
-//                //barre->setValue(i);
-//                //RenderThread::update(i);
-//            }
-//            outputVideo << res;
-//        }
-//    }
-
-//    string ffmpegCMD("\"\""+path+"/ffmpeg\" -y -i \""+path+"/temp.avi\" -i \""+vid+"\" -map 0:v -map 1:a -c copy -shortest \""+NAME+"\" > log.txt \"");
-//    cout << ffmpegCMD << endl;
-//    cout << "TEST TEST TEST TEST" << endl;
-//    cerr << "TEST2 TEST2 TES T  2 TEST2" << endl;
-//    cout << system(ffmpegCMD.c_str()) << endl;
-//    string temp(path + "/temp.avi");
-//    cout << "temporaire a supprimer:" << temp << endl;
-////    remove(temp.c_str());
-////    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
-//    cout << "Finished writing" << endl;
-//    //barre->setVisible(false);
-//    //waitKey(0);
-//    return 0;
-//}
 
 #endif
