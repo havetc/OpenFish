@@ -72,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
     QObject::connect(ui->actionR_solution, SIGNAL(triggered(bool)), this->GS_wnd, SLOT(show()));
     QObject::connect(this->GS_wnd, SIGNAL(accepted()), this, SLOT(selectRes()));
     QObject::connect(ui->horizontalSliderTime, SIGNAL(valueChanged(int)), this, SLOT(setTime(int)));
+    QObject::connect(ui->framesSlider, SIGNAL(valueChanged(int)), this, SLOT(update()) );
+    QObject::connect(ui->offsetSlider, SIGNAL(valueChanged(int)), this, SLOT(update()) );
 
 }
 
@@ -112,7 +114,7 @@ void MainWindow::selectFile()
             inputvideo >> src;              // read
             //defini size
             selectRes();
-            QPixmap dem = draft(src, this->resSortie, 45, 100, 100);
+            QPixmap dem = draft(src, this->resSortie, 45, 100, 100, 2, 0);
             inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
             item->setPixmap(dem);
             //ui->graphicsView->fitInView(item,Qt::KeepAspectRatio);
@@ -162,7 +164,9 @@ void MainWindow::selectRes()
 
 void MainWindow::update()
 {
-    QPixmap dem = draft(src, resSortie, this->ui->verticalSliderHaut->value(), this->ui->verticalSliderZoom->value(), this->ui->verticalSliderFov->value());
+    QPixmap dem = draft(src, resSortie, this->ui->verticalSliderHaut->value(),
+                        this->ui->verticalSliderZoom->value(), this->ui->verticalSliderFov->value(),
+                        this->ui->framesSlider->value(), this->ui->offsetSlider->value());
     this->scn->clear();
     this->item = new QGraphicsPixmapItem();
     this->item->setPixmap(dem);
@@ -238,6 +242,7 @@ void MainWindow::startRender()
 
     thr = new RenderThread(this->ui->actionAvec_audio->isChecked(),
                 this->ui->verticalSliderHaut->value(),this->ui->verticalSliderZoom->value() / 100.0,this->ui->verticalSliderFov->value(),
+                           this->ui->framesSlider->value(), this->ui->offsetSlider->value(),
                            this->vid, this->inputvideo, this->resSortie, S, NAME, path);
 
     QObject::connect(this->thr, SIGNAL(update(int)),this->ui->progressBar,SLOT(setValue(int)));
@@ -253,7 +258,7 @@ void MainWindow::errorPopUp()
     QMessageBox::warning(NULL,QString::fromUtf8("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
 }
 
-QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange ) {
+QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange, int frames, int offset ) {
     //zoom en pourcentage
     Mat mx, my, mapx, mapy, res;
     Size s = image.size();
@@ -261,7 +266,7 @@ QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange ) {
     outputsmall.height /= 10;
     outputsmall.width /= 10;
 
-    create_map(mapx, mapy, s, outputsmall, hauteur, zoom/100.0, fovChange);
+    create_map(mapx, mapy, s, outputsmall, hauteur, zoom/100.0, fovChange, frames, offset);
     resize(mapx, mx, output);
     resize(mapy, my, output);
     remap(image, res, mx, my, INTER_LINEAR);// , BORDER_WRAP);

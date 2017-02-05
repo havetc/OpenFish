@@ -28,173 +28,296 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_7">
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
-      <property name="margin">
-       <number>2</number>
-      </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
         </property>
         <item>
-         <widget class="QLabel" name="labelHaut">
-          <property name="text">
-           <string>hauteur °</string>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
           </property>
-         </widget>
+          <item>
+           <widget class="QLabel" name="labelHaut">
+            <property name="text">
+             <string>hauteur °</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumberHaut">
+            <property name="autoFillBackground">
+             <bool>true</bool>
+            </property>
+            <property name="smallDecimalPoint">
+             <bool>false</bool>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="value" stdset="0">
+             <double>45.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="verticalSliderHaut">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>90</number>
+            </property>
+            <property name="value">
+             <number>45</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::NoTicks</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLCDNumber" name="lcdNumberHaut">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="smallDecimalPoint">
-           <bool>false</bool>
-          </property>
-          <property name="segmentStyle">
-           <enum>QLCDNumber::Flat</enum>
-          </property>
-          <property name="value" stdset="0">
-           <double>45.000000000000000</double>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="labelZoom">
+            <property name="text">
+             <string>zoom %</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumberZoom">
+            <property name="autoFillBackground">
+             <bool>true</bool>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="intValue" stdset="0">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="verticalSliderZoom">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>400</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QSlider" name="verticalSliderHaut">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="maximum">
-           <number>90</number>
-          </property>
-          <property name="value">
-           <number>45</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="labelFov">
+            <property name="text">
+             <string>correction fov %</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumberFov">
+            <property name="autoFillBackground">
+             <bool>true</bool>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+            <property name="intValue" stdset="0">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="verticalSliderFov">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>50</number>
+            </property>
+            <property name="maximum">
+             <number>120</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="sliderPosition">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="invertedAppearance">
+             <bool>false</bool>
+            </property>
+            <property name="invertedControls">
+             <bool>false</bool>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::NoTicks</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="labelZoom">
-          <property name="text">
-           <string>zoom %</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLCDNumber" name="lcdNumberZoom">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="segmentStyle">
-           <enum>QLCDNumber::Flat</enum>
-          </property>
-          <property name="intValue" stdset="0">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="verticalSliderZoom">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>400</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QLabel" name="labelFov">
-          <property name="text">
-           <string>correction fov %</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLCDNumber" name="lcdNumberFov">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="segmentStyle">
-           <enum>QLCDNumber::Flat</enum>
-          </property>
-          <property name="intValue" stdset="0">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="verticalSliderFov">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QLabel" name="frames">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Nombre de frame</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="framesSlider">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimum">
-           <number>50</number>
+           <number>2</number>
           </property>
           <property name="maximum">
-           <number>120</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-          <property name="sliderPosition">
-           <number>100</number>
+           <number>6</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="invertedAppearance">
-           <bool>false</bool>
-          </property>
-          <property name="invertedControls">
-           <bool>false</bool>
+           <enum>Qt::Horizontal</enum>
           </property>
           <property name="tickPosition">
            <enum>QSlider::NoTicks</enum>
+          </property>
+          <property name="tickInterval">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="framesLcd">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
+          </property>
+          <property name="intValue" stdset="0">
+           <number>2</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="offset">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Orientation</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="offsetSlider">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximum">
+           <number>90</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="offsetLcd">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
           </property>
          </widget>
         </item>
@@ -238,19 +361,6 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
-       <widget class="QLabel" name="label">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Apercu:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QProgressBar" name="progressBar">
         <property name="enabled">
          <bool>true</bool>
@@ -272,6 +382,19 @@
         </property>
         <property name="format">
          <string>%p%</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Apercu:</string>
         </property>
        </widget>
       </item>
@@ -341,7 +464,7 @@
      <x>0</x>
      <y>0</y>
      <width>869</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTest">
@@ -421,18 +544,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>verticalSliderHaut</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>lcdNumberHaut</receiver>
-   <slot>display(int)</slot>
+   <sender>actionFermer</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>196</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>54</x>
-     <y>84</y>
+     <x>434</x>
+     <y>200</y>
     </hint>
    </hints>
   </connection>
@@ -453,18 +576,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionFermer</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>close()</slot>
+   <sender>verticalSliderHaut</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lcdNumberHaut</receiver>
+   <slot>display(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>20</x>
+     <y>196</y>
     </hint>
     <hint type="destinationlabel">
-     <x>434</x>
-     <y>200</y>
+     <x>54</x>
+     <y>84</y>
     </hint>
    </hints>
   </connection>
@@ -481,6 +604,38 @@
     <hint type="destinationlabel">
      <x>189</x>
      <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>framesSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>framesLcd</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>328</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>offsetSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>offsetLcd</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>359</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>359</y>
     </hint>
    </hints>
   </connection>

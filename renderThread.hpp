@@ -45,12 +45,15 @@ class RenderThread : public QThread {
 
     Q_OBJECT
 public:
-    RenderThread(bool withsound, int hauteur, float zoom, int fov, QString vid, cv::VideoCapture & inputVideo,
-                 cv::Size output, cv::Size S /*input*/, const QString & NAME, const QDir& path)
+    RenderThread(bool withsound, int hauteur, float zoom, int fov, int frames, int offs,
+                 QString vid, cv::VideoCapture & inputVideo,
+                 cv::Size output, cv::Size S, const QString & NAME, const QDir& path)
         : QThread::QThread(){
         this->hauteur = hauteur;
         this->zoom = zoom;
         this->fov = fov;
+        this->frames = frames;
+        this->offs = offs;
         this->vid = vid;
         this->output =output;
         this->S = S;
@@ -71,7 +74,7 @@ public:
         using namespace cv;
 
         Mat mapx, mapy;
-        create_map(mapx, mapy, S, output, hauteur , zoom, fov);
+        create_map(mapx, mapy, S, output, hauteur , zoom, fov, frames, offs);
 
         cout << "map created" << endl;
 
@@ -159,6 +162,8 @@ public:
 private:
     int hauteur;
     int fov;
+    int frames;
+    int offs;
     bool withsound;
     float zoom;
     //absolute path of the input video

@@ -56,7 +56,8 @@ float get_r(float theta, float phi, Point3f & contact) {
 /*function that create the map used to remap each frame
  * frameSize: output size (?)
  */
-void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float AngleHauteur , float zoom, int fovChange ) {
+void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output,
+                float AngleHauteur , float zoom, int fovChange, int frames, int offset ) {
 
 
     map_x.create(output, CV_32FC1);
@@ -84,12 +85,13 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
     Matx33f rot3d(cos(hauteur), 0, sin(hauteur),
         0, 1, 0,
         -sin(hauteur), 0, cos(hauteur));
+    float offsetAng = offset * (CV_PI / 180);
     cout << "contact coord: " << contact << endl;
     cout << "rotated contact: " << rot3d * contact << endl;
 
     for (int j = 0; j < map_x.rows; j++)
     {
-        for (int i = map_x.cols / 2; i < map_x.cols; i++) {
+        for (int i = 0 /*map_x.cols/2*/ ; i < map_x.cols; i++) {
             Point2f p(i, j);
             p -= center;
             Vec<float, 1> resMag;
@@ -99,22 +101,17 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
             Vec<float, 1> y((CV_PI / 2.0) * p.y * (fovChange / 100.0) / (output.height / 2.0));
 
             cartToPolar(x, y, resMag, resAng);
-            /*if (resMag[0] > 1) {
-                cout << x << y << endl;
-            }*/
+            resAng[0] += offsetAng;
+            double segment_size = (2 * CV_PI) / frames;
+            resAng[0] = fmod(resAng[0] + segment_size/2, segment_size)- segment_size/2;
             float r = get_r(resMag[0], resAng[0], contact);
 
             Point3f plan = polar_to_sphere(resAng[0], resMag[0], r);
 
             Point3f rotate = rot3d * plan;
 
-            //right side
             map_y.at<float>(j, i) = (-rotate.z) * invzoom * height + height / 2;
             map_x.at<float>(j, i) = - rotate.y * invzoom * height + width / 2;
-
-            //left side
-            map_y.at<float>(map_x.rows - j - 1, map_x.cols - i) = (-rotate.z) * invzoom * height + height / 2;
-            map_x.at<float>(map_x.rows - j - 1, map_x.cols - i) =  - rotate.y * invzoom * height + width / 2;
         }
     }
     convertMaps(map_x, map_y, map_x, map_y, CV_16SC2);
