@@ -82,7 +82,7 @@ public:
 
         if (!outputVideo.isOpened())
         {
-            cerr << "Could not open the temp output video for write: " << vid.toLocal8Bit().constData() << endl;
+            cerr << "Could not open the temp output video for write: " << qPrintable(vid) << endl;
             QMessageBox::critical(NULL, QString("Erreur"), QString::fromLocal8Bit("Le fichier n'a pas pu être écrit"));
             end(true);
         }
@@ -112,24 +112,32 @@ public:
         if(withsound){
 
             int returned = 0;
+#if defined _WIN32 || defined _WIN64
+            QString ffmpegCMD = QString("ffmpeg.exe -y -i \""+path.absoluteFilePath("temp.avi") +
+                                        "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\" ");
+//            QString ffmpegCMD = QString("DIR" );
+
+//            QString logString = QString("echo \"ffmpeg.exe -y -i \""+path.absoluteFilePath("temp.avi") +
+//                                        "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\"\" > logcmd.txt" );
+//            returned =  _wsystem(logString.toStdWString().data());
+            returned =  _wsystem(ffmpegCMD.toStdWString().data());
+#elif defined __linux__
             QString ffmpegCMD = QString("avconv -y -i \""+path.absoluteFilePath("temp.avi") +
                                         "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\" " );
 
             QString logString = QString("echo \"avconv -y -i \""+path.absoluteFilePath("temp.avi") +
                                         "\" -i \""+vid+"\" -map 0:v -map 1:a -c:a copy -c:v copy -shortest \""+NAME+"\"\" > logcmd.txt" );
-
-            std::cout << ffmpegCMD.toLocal8Bit().constData() << std::endl;
-            //only windows, system should work fine for linux
-            returned =  system(logString.toLocal8Bit().constData());
-            returned =  system(ffmpegCMD.toLocal8Bit().constData());
-
+            returned =  system(qPrintable(logString));
+            returned =  system(qPrintable(ffmpegCMD));
+#endif
+            std::cout << qPrintable(ffmpegCMD) << std::endl;
             if(returned != 0) {
                 sound_error();
                 //render done but ffmpeg bug, without sound
                 cout << QFile::rename( temp, NAME) << endl;
                 end(false);
             } else {
-                cout << "temporaire a supprimer:" << temp.toStdString() << endl;
+                cout << "temporaire a supprimer:" << qPrintable(temp) << endl;
                 QFile::remove(temp);
                 //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
                 cout << "Finished writing" << endl;
@@ -138,7 +146,7 @@ public:
             }
             //
         } else {
-            cout << "temporaire a supprimer:" << temp.toStdString() << endl;
+            cout << "temporaire a supprimer:" << qPrintable(temp) << endl;
             cout << QFile::rename( temp, NAME) << endl;
             //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
             cout << "Finished writing" << endl;

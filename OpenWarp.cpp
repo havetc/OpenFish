@@ -68,9 +68,9 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
     Point2f center(output.width / 2.0, output.height / 2.0);
 
     //angle lié à la hauteur, en radian
-    float hauteur = (M_PI / 180) * AngleHauteur;
+    float hauteur = (CV_PI / 180) * AngleHauteur;
     float invzoom = 1/zoom;
-    float thetac = M_PI / 2.0 - hauteur;
+    float thetac = CV_PI / 2.0 - hauteur;
 
     //definition des coordonnée de contact dome/plan
     float zco = cos(thetac);
@@ -95,8 +95,8 @@ void create_map(Mat & map_x, Mat & map_y, CvSize frameSize, CvSize output, float
             Vec<float, 1> resMag;
             Vec<float, 1> resAng;
 
-            Vec<float, 1> x((M_PI / 2.0) * p.x * (fovChange / 100.0) / (output.height / 2.0));
-            Vec<float, 1> y((M_PI / 2.0) * p.y * (fovChange / 100.0) / (output.height / 2.0));
+            Vec<float, 1> x((CV_PI / 2.0) * p.x * (fovChange / 100.0) / (output.height / 2.0));
+            Vec<float, 1> y((CV_PI / 2.0) * p.y * (fovChange / 100.0) / (output.height / 2.0));
 
             cartToPolar(x, y, resMag, resAng);
             /*if (resMag[0] > 1) {
@@ -161,10 +161,10 @@ void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
 
 VideoCapture getInputVideo(QString vid)
 {
-    VideoCapture inputVideo(vid.toLocal8Bit().constData());// Open input
+    VideoCapture inputVideo(qPrintable(vid));// Open input
     if (!inputVideo.isOpened())
     {
-        cout << "Could not open the input video: " << vid.toLocal8Bit().constData() << endl;
+        cout << "Could not open the input video: " << qPrintable(vid) << endl;
         return inputVideo;
     }
 

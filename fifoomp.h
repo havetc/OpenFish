@@ -20,7 +20,7 @@
 #ifndef FIFOOMP_H
 #define FIFOOMP_H
 #include <omp.h>
-#include <cv.hpp>
+//#include <cv.hpp>
 #include <queue>
 #include <opencv2/highgui/highgui.hpp>
 

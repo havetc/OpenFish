@@ -35,7 +35,7 @@ FORMS    += mainwindow.ui \
 #unix|win32: LIBS += -lmsvfw32
 
 
-win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lopenmp -lopencv_world300
+win32: LIBS += -L$(OPENCV_DIR)\BuildMingw\install\x86\mingw\lib -lgomp -lopencv_world300
 
 win32: INCLUDEPATH += $(OPENCV_DIR)\BuildMingw\install\include
 win32: DEPENDPATH += $(OPENCV_DIR)\BuildMingw\install\include

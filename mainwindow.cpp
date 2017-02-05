@@ -199,9 +199,9 @@ void MainWindow::endRender(bool withsound)
     this->ui->pushButton->setEnabled(true);
     this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
     if(withsound){
-        QMessageBox::information(this, QString("Info"), QString::fromLocal8Bit("Conversion terminée"));
+        QMessageBox::information(this, QString("Info"), QString::fromUtf8("Conversion terminée"));
     } else {
-        QMessageBox::information(this, QString("Info"), QString::fromLocal8Bit("Conversion terminée, sans son"));
+        QMessageBox::information(this, QString("Info"), QString::fromUtf8("Conversion terminée, sans son"));
     }
     delete this->thr;
 
@@ -250,7 +250,7 @@ void MainWindow::startRender()
 
 void MainWindow::errorPopUp()
 {
-    QMessageBox::warning(NULL,QString::fromLocal8Bit("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
+    QMessageBox::warning(NULL,QString::fromUtf8("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
 }
 
 QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange ) {
