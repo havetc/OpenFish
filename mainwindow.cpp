@@ -33,6 +33,7 @@
 #include <iostream>
 #include <QThread>
 #include <QWheelEvent>
+#include <QTranslator>
 
 
 GetSize::GetSize(QWidget *parent) :
@@ -75,6 +76,12 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
     QObject::connect(ui->framesSlider, SIGNAL(valueChanged(int)), this, SLOT(update()) );
     QObject::connect(ui->offsetSlider, SIGNAL(valueChanged(int)), this, SLOT(update()) );
 
+    QObject::connect(ui->setEn, SIGNAL(triggered(bool)), this, SLOT(setEN()));
+    QObject::connect(ui->setFR, SIGNAL(triggered(bool)), this, SLOT(setFR()));
+    QObject::connect(ui->setRu, SIGNAL(triggered(bool)), this, SLOT(setRU()));
+
+    QString defaultlocale = QLocale::system().name().section('_', 0, 0);
+    this->resetTranslator(defaultlocale);
 }
 
 MainWindow::~MainWindow()
@@ -91,20 +98,20 @@ MainWindow::~MainWindow()
 void MainWindow::selectFile()
 {
 #if QT_DEPRECATED_SINCE(5, 0)
-    QString tempfilename = QFileDialog::getOpenFileName(this,QString::fromUtf8("Sélectionner la vidéo à traiter"),QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
+    QString tempfilename = QFileDialog::getOpenFileName(this,tr("Sélectionner la vidéo à traiter"),QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
 #else
-    QString tempfilename = QFileDialog::getOpenFileName(this,QString::fromUtf8("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
+    QString tempfilename = QFileDialog::getOpenFileName(this,tr("Sélectionner la vidéo à traiter"),QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
 #endif
 
     QFile file(tempfilename);
     if (!file.exists()){
-        QMessageBox::warning(this, QString("Attention"), QString("Le fichier: "+this->vid+" n'exite pas"));
+        QMessageBox::warning(this, tr("Attention"), tr("Le fichier: ")+ this->vid + tr(" n'exite pas"));
     } else {
         this->inputvideo = getInputVideo(tempfilename);
         if(this->inputvideo.isOpened()) {
             //we change the attribute of the class only if the new filename is valid, otherwise we keep the old one
             this->vid = tempfilename;
-            QMessageBox::information(this, QString::fromUtf8("Vidéo Ouverte"), this->vid);
+            QMessageBox::information(this, tr("Vidéo Ouverte"), this->vid);
             ui->verticalSliderHaut->setEnabled(true);
             ui->verticalSliderZoom->setEnabled(true);
             ui->verticalSliderFov->setEnabled(true);
@@ -124,7 +131,7 @@ void MainWindow::selectFile()
             //this->adjustSize();
             //ui->graphicsView->show();
         } else {
-            QMessageBox::critical(this, QString("Attention"), QString("Le fichier: "+tempfilename+QString::fromUtf8(" n'est pas un fichier vidéo valide")) );
+            QMessageBox::critical(this, tr("Attention"), tr("Le fichier: ")+tempfilename+tr(" n'est pas un fichier vidéo valide") );
             //if the new file was invalid, we reload the old one
             this->inputvideo = getInputVideo(this->vid);
         }
@@ -154,7 +161,7 @@ void MainWindow::selectRes()
         int width = this->GS_wnd->ui->spinBoxWidth->value();
         this->resSortie = cv::Size(width, height);
     } else {
-        QMessageBox::critical(this,QString("error"), QString("output resolution non determined"));
+        QMessageBox::critical(this,tr("error"), tr("output resolution non determined"));
     }
 
     if (inputvideo.isOpened()) {
@@ -203,9 +210,9 @@ void MainWindow::endRender(bool withsound)
     this->ui->pushButton->setEnabled(true);
     this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
     if(withsound){
-        QMessageBox::information(this, QString("Info"), QString::fromUtf8("Conversion terminée"));
+        QMessageBox::information(this, tr("Info"), tr("Conversion terminée"));
     } else {
-        QMessageBox::information(this, QString("Info"), QString::fromUtf8("Conversion terminée, sans son"));
+        QMessageBox::information(this, tr("Info"), tr("Conversion terminée, sans son"));
     }
     delete this->thr;
 
@@ -255,7 +262,40 @@ void MainWindow::startRender()
 
 void MainWindow::errorPopUp()
 {
-    QMessageBox::warning(NULL,QString::fromUtf8("Problème son"),QString("Erreur de ffmpeg, le fichier est convertit mais sans son"));
+    QMessageBox::warning(NULL,tr("Problème son"),tr("Erreur de ffmpeg, le fichier est convertit mais sans son"));
+}
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+        std::cout << "langage change" << std::endl;
+        ui->retranslateUi(this);
+        this->GS_wnd->ui->retranslateUi(this->GS_wnd);
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::resetTranslator(QString locale){
+    static QTranslator translator;
+    QCoreApplication::removeTranslator(&translator);
+    translator.load(QString("OpenFish_") + locale, QString("lang"));
+    QCoreApplication::installTranslator(&translator);
+}
+
+void MainWindow::setFR()
+{
+    this->resetTranslator("fr");
+}
+
+void MainWindow::setEN()
+{
+    this->resetTranslator("en");
+}
+
+void MainWindow::setRU()
+{
+    this->resetTranslator("ru");
 }
 
 QPixmap draft(Mat image, Size & output, int hauteur, int zoom, int fovChange, int frames, int offset ) {

@@ -23,6 +23,8 @@ HEADERS += mainwindow.h \
     renderThread.hpp \
     fifoomp.h
 
+TRANSLATIONS += lang/OpenFish_fr.ts lang/OpenFish_en.ts lang/OpenFish_ru.ts
+
 FORMS    += mainwindow.ui \
     getsize.ui
 

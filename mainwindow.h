@@ -70,6 +70,8 @@ public:
     explicit MainWindow(QWidget *parent = 0, int argc = 0, char** argv = NULL);
     ~MainWindow();
 
+    void changeEvent(QEvent *event);
+
 public slots:
 
     void selectFile();
@@ -79,8 +81,14 @@ public slots:
     void endRender(bool withsound);
     void startRender();
     void errorPopUp();
+    void setFR();
+    void setEN();
+    void setRU();
 
 private:
+
+    void resetTranslator(QString locale);
+
     Ui::MainWindow *ui;
 
     GetSize* GS_wnd;

@@ -481,8 +481,20 @@
     <addaction name="actionR_solution"/>
     <addaction name="actionAvec_audio"/>
    </widget>
+   <widget class="QMenu" name="menuLangage">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>&amp;Langage</string>
+    </property>
+    <addaction name="setFR"/>
+    <addaction name="setEn"/>
+    <addaction name="setRu"/>
+   </widget>
    <addaction name="menuTest"/>
    <addaction name="menuOptions"/>
+   <addaction name="menuLangage"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -537,6 +549,21 @@
    </property>
    <property name="text">
     <string comment="with sound">Avec audio</string>
+   </property>
+  </action>
+  <action name="setFR">
+   <property name="text">
+    <string>Français</string>
+   </property>
+  </action>
+  <action name="setEn">
+   <property name="text">
+    <string>Anglais</string>
+   </property>
+  </action>
+  <action name="setRu">
+   <property name="text">
+    <string>Russe</string>
    </property>
   </action>
  </widget>

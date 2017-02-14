@@ -125,37 +125,6 @@ void on_trackbar2(int, void * value) {
     *(int*)value = *(int*)value - *(int*)value % 16;
 }
 
-
-/* transfert dans mainWindow
-void draft(Mat image, Size & output, int * hauteur, float * zoom ) {
-    //zoom en pourcentage
-    int izoom = 100;
-    bool change = true;
-    createTrackbar("hauteur ", "Open Warp", hauteur, 90, on_trackbar, &change);
-    createTrackbar("zoom", "Open Warp", &izoom, 500, on_trackbar, &change);
-//    createTrackbar("Largeur sortie ", "Open Warp", &output.width, 4000, on_trackbar2, &output.width);
-//    createTrackbar("Hauteur sortie", "Open Warp", &output.height, 4000, on_trackbar2, &output.height);
-    Mat mx, my, mapx, mapy, res;
-    Size s = image.size();
-    while (waitKey(10) == -1) {
-        //on retrace que si l'on a changé un paramètre
-        if (change) {
-            *zoom = izoom / 100.0;
-            create_map(mapx, mapy, s, output / 10, *hauteur, *zoom);
-            resize(mapx, mx, output);
-            resize(mapy, my, output);
-            remap(image, res, mx, my, INTER_LINEAR);// , BORDER_WRAP);
-            imshow("Open Warp", res);
-        }
-        change = false;
-    }
-    //MessageBeep(MB_OK);
-    //waitKey(0);
-}
-*/
-
-
-
 VideoCapture getInputVideo(QString vid)
 {
     VideoCapture inputVideo(qPrintable(vid));// Open input

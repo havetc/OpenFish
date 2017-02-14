@@ -134,6 +134,7 @@ public:
             returned =  system(qPrintable(ffmpegCMD));
 #endif
             std::cout << qPrintable(ffmpegCMD) << std::endl;
+            outputVideo.release();
             if(returned != 0) {
                 sound_error();
                 //render done but ffmpeg bug, without sound
@@ -141,9 +142,11 @@ public:
                 end(false);
             } else {
                 cout << "temporaire a supprimer:" << qPrintable(temp) << endl;
-                QFile::remove(temp);
-                //    MessageBox(NULL, TEXT("Conversion terminée"), __TEXT("Info"), MB_OK);
-                cout << "Finished writing" << endl;
+                if (QFile::remove(temp)){
+                    cout << "Finished writing" << endl;
+                } else {
+                    cout << "error " << qPrintable(temp) << " couldn't be suppressed" << endl;
+                }
                 //render done, with sound
                 end(true);
             }
