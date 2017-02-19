@@ -86,8 +86,8 @@ MainWindow::MainWindow(QWidget *parent, int argc, char **argv) :
 
 MainWindow::~MainWindow()
 {
-    if (thr != NULL)
-        delete thr;
+//    if (thr != NULL)
+//        delete thr;
 
     delete GS_wnd;
     delete item;
@@ -116,6 +116,8 @@ void MainWindow::selectFile()
             ui->verticalSliderZoom->setEnabled(true);
             ui->verticalSliderFov->setEnabled(true);
             ui->horizontalSliderTime->setEnabled(true);
+            this->ui->framesSlider->setEnabled(true);
+            this->ui->offsetSlider->setEnabled(true);
             ui->pushButton->setEnabled(true);
             this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 10);
             inputvideo >> src;              // read
@@ -208,6 +210,8 @@ void MainWindow::endRender(bool withsound)
     this->ui->menuTest->setEnabled(true);
     this->ui->menuOptions->setEnabled(true);
     this->ui->pushButton->setEnabled(true);
+    this->ui->framesSlider->setEnabled(true);
+    this->ui->offsetSlider->setEnabled(true);
     this->inputvideo.set(CV_CAP_PROP_POS_FRAMES, 0);
     if(withsound){
         QMessageBox::information(this, tr("Info"), tr("Conversion terminée"));
@@ -224,6 +228,8 @@ void MainWindow::startRender()
     this->ui->horizontalSliderTime->setEnabled(false);
     this->ui->menuOptions->setEnabled(false);
     this->ui->pushButton->setEnabled(false);
+    this->ui->framesSlider->setEnabled(false);
+    this->ui->offsetSlider->setEnabled(false);
     //keep the program directory inside "prog"
     QDir path (QCoreApplication::applicationDirPath());
     std::cout << "Path: " << path.absolutePath().toStdString() << std::endl;

@@ -99,15 +99,15 @@ public:
             OrderedMat src, res;
 
             inputsource >> src;              // read
+            if(src._frame.cols != 0){
+                remap(src._frame, res._frame, mapx, mapy, INTER_LINEAR, BORDER_CONSTANT);
 
-            remap(src._frame, res._frame, mapx, mapy, INTER_LINEAR, BORDER_CONSTANT);
-
-            if (src._pos % 32 == 0) {
-                update(src._pos);
+                if (src._pos % 32 == 0) {
+                    update(src._pos);
+                }
+                res._pos = src._pos;
+                outputsource << res;
             }
-            res._pos = src._pos;
-            outputsource << res;
-
         }
 
         QString temp = path.absoluteFilePath("temp.avi");
