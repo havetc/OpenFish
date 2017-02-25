@@ -492,7 +492,7 @@
      <bool>false</bool>
     </property>
     <property name="title">
-     <string>&amp;Langage</string>
+     <string>Langage</string>
     </property>
     <addaction name="setFR"/>
     <addaction name="setEn"/>
