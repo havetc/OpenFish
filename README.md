@@ -1,8 +1,14 @@
 # OpenFish
 
-This project allows to deform videos in order to make them visible after projection by fish-eye
+This project allows to deform videos in order to make them visible after projection by fish-eye. The computer should have video
+codec available. Under microsoft, it could be needed to install for example the K-lite codec pack in case of troubles.
 
 # Compilation / Installation
+
+**Windows**
+
+This project can be compiled under microsoft windows. However there is no easy way to install the dependencies, so it is
+recommended to use the pre-build version.
 
 **On Ubuntu**
 
@@ -34,6 +40,9 @@ If all dependencies are met, then:
 
 should compile the project
 
-**Windows**
 
-The windows support has been dropped, but it could still work with some little tweaks
+**Special thanks**
+
+MJC Pont du Sonnant
+Lionel Ruiz, for the good suggestions
+My friend Viktorija, for translating OpenFish in Russian
